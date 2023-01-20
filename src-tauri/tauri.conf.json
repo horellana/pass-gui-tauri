@@ -11,6 +11,37 @@
   },
   "tauri": {
     "allowlist": {
+      "fs": {
+        "all": true,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true,
+        "exists": true,
+        "scope": ["*"]
+      },
+      "shell": {
+        "all": true,
+        "execute": true,
+        "sidecar": true,
+        "open": true,
+        "scope": [
+            {
+              "name": "get-pass-version",
+              "cmd": "pass",
+              "args": ["--version"]
+            },
+            {
+              "name": "get-pass-path",
+              "cmd": "which",
+              "args": ["pass"]
+            }
+        ]
+      },
       "all": true
     },
     "bundle": {
