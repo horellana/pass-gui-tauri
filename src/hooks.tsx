@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { isEqual } from "lodash";
 
+import { PassEntry } from "./types";
 import * as commands from "./commands";
 
 export function useWindowDimensions() {
@@ -33,7 +34,8 @@ export function useWindowDimensions() {
 }
 
 export function usePassEntries(filter: string): any {
-  const [entries, setEntries] = useState([]);
+  const initialState : PassEntry[] = [];
+  const [entries, setEntries] = useState(initialState);
 
   useEffect(() => {
     const fetchEntries = async () => {

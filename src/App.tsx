@@ -21,14 +21,14 @@ import { usePassEntries, useWindowDimensions } from "./hooks";
 
 interface AppState {
   entries: PassEntry[],
-  filter: string,
-  selectedEntry: PassEntry
+  filter?: string,
+  selectedEntry?: PassEntry
 };
 
 const initialState: AppState = {
   entries: [],
-  filter: "",
-  selectedEntry: ""
+  filter: undefined,
+  selectedEntry: undefined
 };
 
 interface AppAction {
@@ -148,13 +148,13 @@ function EntriesList(props: any) {
 
   if (entries.length > 0) {
     return (
-      <ListGroup style={listStyle}>
+      <ListGroup style={{overflowY: "scroll", maxHeight: `${Math.floor(0.90 * dimensions.height)}px`}}>
         {
           entries.map((entry: string) => {
             return (
               <EntryItem
                     entry={entry}
-                    onClick={(e) => props.selectEntry(entry)}
+                    onClick={(e: PassEntry) => props.selectEntry(entry)}
                     onRemove={() => onRemoveEntry(entry)}
                     active={entry === props.selectedEntry} />
             );
@@ -196,16 +196,15 @@ function App() {
   useEffect(() => {
     commands
       .listEntries(state.filter)
-      .catch(console.error)
-      .then((entries: PassEntry[]) => dispatch({ type: "SET_ENTRIES", payload: entries}));
+      .then((entries: PassEntry[]) => dispatch({ type: "SET_ENTRIES", payload: entries}))
+      .catch(console.error);
   }, [state.filter]);
 
   useEffect(() => {
     if (state.selectedEntry && state.selectedEntry.name != "") {
       commands
         .getEntry(state.selectedEntry.name)
-        .catch(console.error)
-        .then((content: string) => {
+        .then((content) => {
           dispatch({
             type: "SET_ENTRY_CONTENT",
             payload: {
@@ -213,7 +212,8 @@ function App() {
               content: content
             }
           })
-        });
+        })
+        .catch(console.error);
     }
   }, [state.selectedEntry]);
 
@@ -226,7 +226,7 @@ function App() {
   }, []);
 
   const getSelectedEntry = () => {
-    const entries = state.entries.filter((entry_) => entry_.name === state.selectedEntry.name);
+    const entries = state.entries.filter((entry_ : PassEntry) => entry_.name === state.selectedEntry.name);
     return entries.length > 0 ? entries[0] : null;
   };
 

@@ -26,9 +26,8 @@ export async function listEntries(filter: string): Promise<PassEntry[]> {
   return entries.map((entry: string) => {
     return {
       name: entry,
-      content: undefined,
+      content: "",
       selected: false
     }
   }).sort();
-
 }
